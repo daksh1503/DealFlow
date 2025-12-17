@@ -1,0 +1,297 @@
+Role
+
+You are a senior full-stack engineer and product designer building a solo-friendly SaaS MVP.
+
+Goal
+
+Build a creator-first Brand Deal CRM that helps individual creators & influencers manage:
+
+Brand deals
+
+Deal pipeline
+
+Contracts
+
+Payments
+
+Earnings analytics
+
+Smart reminders
+
+The product must be simple, fast, and production-ready, not enterprise-heavy.
+
+Target User
+
+Solo creators & influencers
+
+10k–500k followers
+
+Instagram / YouTube focused
+
+No agencies, no brands
+
+Tech Stack (STRICT)
+
+Frontend: Next.js
+
+Styling: Tailwind CSS + shadcn/ui
+
+Backend: FastAPI
+
+Database: PostgreSQL
+
+Auth: Supabase Auth
+
+File storage: Cloudflare R2 (or S3)
+
+Charts: Recharts
+
+Deployment-ready code
+
+CORE MVP FEATURES (DO NOT ADD MORE)
+1. Deal Pipeline (Core Feature)
+
+Implement a Kanban board with stages:
+
+Lead
+
+Negotiation
+
+Signed
+
+Content Delivered
+
+Paid
+
+Each deal must store:
+
+Brand name
+
+Platform (Instagram, YouTube, etc.)
+
+Deal value
+
+Deadline
+
+Status
+
+Notes
+
+Provide:
+
+Create / edit / delete deals
+
+Drag & drop between stages
+
+2. Earnings & Payment Tracking
+
+Each deal can have multiple payments:
+
+Amount
+
+Paid / pending status
+
+Payment date
+
+Mode (optional)
+
+Dashboard analytics:
+
+Total earnings (lifetime)
+
+Earnings this month
+
+Pending payments
+
+Brand-wise earnings
+
+Platform-wise earnings
+
+Use simple charts (line + bar).
+
+3. Contract Vault (Lite)
+
+Upload contract PDFs
+
+Store:
+
+Usage rights end date
+
+Exclusivity end date
+
+Display contracts linked to deals
+
+No AI contract analysis in MVP
+
+4. Smart Reminders
+
+Implement reminder types:
+
+Follow-up reminder
+
+Content delivery reminder
+
+Payment reminder
+
+Email notifications only
+
+Background job / cron-based
+
+User can create and delete reminders
+
+5. Creator Dashboard (Home Screen)
+
+At login, show:
+
+Earnings this month
+
+Pending payments count
+
+Upcoming deadlines (next 7 days)
+
+Top paying brands
+
+DATABASE MODELS (REQUIRED)
+User
+
+id
+
+email
+
+created_at
+
+Deal
+
+id
+
+user_id
+
+brand_name
+
+platform
+
+deal_value
+
+status
+
+deadline
+
+notes
+
+created_at
+
+Payment
+
+id
+
+deal_id
+
+amount
+
+paid (boolean)
+
+payment_date
+
+Contract
+
+id
+
+deal_id
+
+file_url
+
+usage_end_date
+
+exclusivity_end_date
+
+Reminder
+
+id
+
+user_id
+
+deal_id
+
+type
+
+remind_at
+
+sent (boolean)
+
+API REQUIREMENTS
+
+REST APIs with clear separation
+
+Authentication-protected routes
+
+Clean error handling
+
+Pagination where needed
+
+UI / UX RULES
+
+Creator-friendly language
+
+Minimal UI
+
+No enterprise jargon
+
+Mobile responsive
+
+Dashboard-first experience
+
+NON-GOALS (IMPORTANT)
+
+DO NOT implement:
+
+Brand discovery
+
+Creator marketplace
+
+Chat system
+
+Mobile apps
+
+Advanced AI features
+
+Agency dashboards
+
+MONETIZATION (DO NOT IMPLEMENT PAYMENTS YET)
+
+Free tier: up to 3 active deals
+
+Pro tier (future): unlimited deals, reminders, analytics
+
+Just add feature flags for limits.
+
+DELIVERABLES
+
+Generate:
+
+Full project folder structure
+
+Backend FastAPI app with models, routes, and migrations
+
+Frontend Next.js app with pages and components
+
+Kanban pipeline UI
+
+Dashboard analytics
+
+README with setup instructions
+
+QUALITY BAR
+
+Clean, readable code
+
+Production-ready patterns
+
+Simple over clever
+
+Optimized for a solo developer
+
+FINAL INSTRUCTION
+
+Build the MVP only.
+Do not over-engineer.
+Assume this product will be launched in 21 days by one developer.
