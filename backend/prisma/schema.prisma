@@ -1,0 +1,125 @@
+// Prisma schema for Brand Deal CRM
+generator client {
+  provider = "prisma-client-py"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User table (will sync with Supabase Auth)
+model User {
+  id              String    @id @default(uuid())
+  email           String?   @unique @map("email")
+  firstName       String?   @map("first_name") @db.VarChar(255)
+  lastName        String?   @map("last_name") @db.VarChar(255)
+  profileImageUrl String?   @map("profile_image_url") @db.VarChar(512)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  deals      Deal[]
+  reminders  Reminder[]
+
+  @@map("users")
+}
+
+// Deal status enum
+enum DealStatus {
+  lead
+  negotiation
+  signed
+  content_delivered
+  paid
+}
+
+// Platform enum
+enum Platform {
+  instagram
+  youtube
+  tiktok
+  twitter
+  linkedin
+  other
+}
+
+// Reminder type enum
+enum ReminderType {
+  follow_up
+  content_delivery
+  payment
+}
+
+// Deals table
+model Deal {
+  id        Int         @id @default(autoincrement())
+  userId    String      @map("user_id") @db.VarChar(255)
+  brandName String      @map("brand_name") @db.VarChar(255)
+  platform  Platform
+  dealValue Decimal     @map("deal_value") @db.Decimal(12, 2)
+  status    DealStatus  @default(lead)
+  deadline  DateTime?
+  notes     String?     @db.Text
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments   Payment[]
+  contracts  Contract[]
+  reminders  Reminder[]
+
+  @@index([userId], name: "deals_user_id_idx")
+  @@index([status], name: "deals_status_idx")
+  @@map("deals")
+}
+
+// Payments table
+model Payment {
+  id          Int       @id @default(autoincrement())
+  dealId      Int       @map("deal_id")
+  amount      Decimal   @db.Decimal(12, 2)
+  paid        Boolean   @default(false)
+  paymentDate DateTime? @map("payment_date")
+  mode        String?   @db.VarChar(100)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  deal Deal @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  @@index([dealId], name: "payments_deal_id_idx")
+  @@map("payments")
+}
+
+// Contracts table
+model Contract {
+  id                Int       @id @default(autoincrement())
+  dealId            Int       @map("deal_id")
+  fileUrl           String    @map("file_url") @db.VarChar(512)
+  fileName          String?   @map("file_name") @db.VarChar(255)
+  usageEndDate      DateTime? @map("usage_end_date")
+  exclusivityEndDate DateTime? @map("exclusivity_end_date")
+  createdAt         DateTime  @default(now()) @map("created_at")
+
+  deal Deal @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  @@index([dealId], name: "contracts_deal_id_idx")
+  @@map("contracts")
+}
+
+// Reminders table
+model Reminder {
+  id        Int          @id @default(autoincrement())
+  userId    String       @map("user_id") @db.VarChar(255)
+  dealId    Int?         @map("deal_id")
+  type      ReminderType
+  title     String       @db.VarChar(255)
+  remindAt  DateTime     @map("remind_at")
+  sent      Boolean      @default(false)
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deal Deal? @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  @@index([userId], name: "reminders_user_id_idx")
+  @@index([remindAt], name: "reminders_remind_at_idx")
+  @@map("reminders")
+}
+
